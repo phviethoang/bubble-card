@@ -14,7 +14,7 @@
 
 export const CONFIG = {
   teacher: 'Nguyễn Thị Thu Trang',
-  pageTitle: 'Gửi cô Nguyễn Thị Thu Trang',
+  pageTitle: 'Bubble Card',
   eyebrow: 'LỜI TRI ÂN',
   greetingTitle: 'Gửi cô\nNguyễn Thị Thu Trang',
   greetingSubtitle:
