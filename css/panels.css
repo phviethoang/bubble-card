@@ -1,0 +1,180 @@
+/* panels.css — cụm nút góc, toast đổi chế độ, và màn "Xem toàn bộ lời nhắn" */
+
+/* ---- cụm nút góc dưới trái ---- */
+#tools {
+  position: fixed;
+  left: 14px;
+  bottom: 14px;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+#tools.is-visible { opacity: 1; pointer-events: auto; }
+
+.tool-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(20, 12, 40, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #e9e1ff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.72;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.3s ease;
+}
+.tool-btn:hover { opacity: 1; }
+#modeBtn:hover { transform: rotate(180deg); }
+#resetBtn:hover { transform: rotate(-90deg); }
+
+/* ---- toast báo chế độ ---- */
+#modeToast {
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  transform: translateX(-50%);
+  z-index: 8;
+  background: rgba(20, 12, 40, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#modeToast.is-visible { opacity: 1; }
+
+/* nút phụ ở màn kết */
+.finale-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.13);
+  color: #fff;
+  box-shadow: none;
+}
+.btn-ghost:hover { box-shadow: none; background: rgba(255, 255, 255, 0.2); }
+
+/* ---- màn Xem toàn bộ ---- */
+#gridView {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(180deg, rgba(22, 15, 46, 0.97), rgba(30, 20, 62, 0.97));
+}
+#gridView[hidden] { display: none; }
+
+.grid-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  text-align: center;
+  padding: 26px 20px 18px;
+  background: linear-gradient(180deg, rgba(22, 15, 46, 0.98) 55%, rgba(22, 15, 46, 0));
+}
+.grid-head h2 {
+  font-family: var(--font-letter);
+  font-size: clamp(22px, 5vw, 32px);
+  margin: 0 0 6px;
+  color: #fff;
+}
+.grid-sub { color: #cbb8ff; font-size: 14px; margin: 0; }
+
+#gridClose {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.grid-body {
+  column-count: 1;
+  column-gap: 18px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 6px 20px 64px;
+}
+@media (min-width: 640px)  { .grid-body { column-count: 2; } }
+@media (min-width: 1000px) { .grid-body { column-count: 3; } }
+@media (min-width: 1360px) { .grid-body { column-count: 4; } }
+
+.gcard {
+  break-inside: avoid;
+  width: 100%;
+  margin: 0 0 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--paper1), var(--paper2));
+  color: var(--ink);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+}
+.gcard-accent {
+  height: 6px;
+  background: linear-gradient(90deg, rgba(var(--c), 1), rgba(var(--c), 0.45));
+}
+
+.gcard-closed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 26px 18px;
+  font-family: var(--font-ui);
+}
+.gcard-seal { font-size: 26px; }
+.gcard-name { font-weight: 700; font-size: 17px; color: var(--ink); }
+.gcard-hint { font-size: 13px; color: var(--ink-soft); }
+.gcard.is-open .gcard-closed { display: none; }
+
+.gcard-open {
+  display: none;
+  padding: 20px 20px 18px;
+  animation: gcard-in 0.35s ease both;
+}
+.gcard.is-open .gcard-open { display: block; }
+.gcard-from { font-family: var(--font-ui); font-size: 13px; color: var(--ink-soft); margin: 0 0 6px; }
+.gcard-from b { color: var(--accent-ink); }
+.gcard-text { font-family: var(--font-letter); font-size: 16px; line-height: 1.8; color: var(--ink); }
+.gcard-text p { margin: 0 0 12px; white-space: pre-wrap; }
+.gcard-text p:last-child { margin-bottom: 0; }
+.gcard-sign { font-family: var(--font-letter); font-style: italic; text-align: right; color: var(--ink-soft); margin: 12px 0 0; }
+
+@keyframes gcard-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}

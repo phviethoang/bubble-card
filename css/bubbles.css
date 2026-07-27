@@ -1,0 +1,114 @@
+/* bubbles.css — vùng bong bóng, hình dáng bong bóng, trạng thái đã đọc */
+
+#field {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* lớp ngoài: JS chỉ dịch chuyển transform ở đây */
+.bubble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  will-change: transform;
+  z-index: 1;
+}
+
+/* lớp trong: toàn bộ phần nhìn thấy + hiệu ứng hover */
+.skin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.28) 15%,
+      rgba(var(--c), 0.70) 48%,
+      rgba(var(--c), 0.40) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+      0 10px 40px rgba(var(--c), 0.45),
+      inset 0 0 26px rgba(255, 255, 255, 0.35),
+      inset -6px -10px 30px rgba(var(--c), 0.35);
+  transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease;
+}
+
+/* vệt sáng phản chiếu — làm bong bóng có khối như thủy tinh.
+   Vị trí/cỡ/độ đậm do JS đặt riêng cho từng bong bóng (biến --hl-*) nên mỗi
+   quả bắt sáng một kiểu, không bị đơn điệu.
+   (Muốn bong bóng phẳng hoàn toàn thì xoá nguyên khối .skin::before này.) */
+.skin::before {
+  content: "";
+  position: absolute;
+  top: var(--hl-y, 15%);
+  left: var(--hl-x, 19%);
+  width: var(--hl-size, 20%);
+  height: var(--hl-size, 20%);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+      rgba(255, 255, 255, var(--hl-a, 0.5)),
+      rgba(255, 255, 255, 0) 68%);
+  filter: blur(2.5px);
+}
+
+.name {
+  font-weight: 600;
+  font-size: var(--fs, 14px);
+  color: #fff;
+  text-shadow: 0 1px 5px rgba(60, 20, 80, 0.6);
+  text-align: center;
+  line-height: 1.15;
+  letter-spacing: 0.2px;
+  padding: 0 10%;
+  pointer-events: none;
+}
+
+.bubble:hover .skin,
+.bubble:focus-visible .skin {
+  transform: scale(1.06);
+  box-shadow:
+      0 16px 54px rgba(var(--c), 0.6),
+      inset 0 0 26px rgba(255, 255, 255, 0.4);
+}
+.bubble:focus { outline: none; }
+
+/* đã đọc: viền vàng ấm + trái tim (KHÔNG làm mờ) */
+.bubble.is-read .skin {
+  box-shadow:
+      0 10px 40px rgba(var(--c), 0.5),
+      0 0 0 2px rgba(255, 214, 140, 0.9),
+      0 0 22px rgba(255, 205, 120, 0.7),
+      inset 0 0 26px rgba(255, 255, 255, 0.35);
+}
+.bubble.is-read .skin::after {
+  content: "❤";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff8fb0, #ff5d7e);
+  border-radius: 50%;
+  box-shadow: 0 3px 10px rgba(255, 80, 120, 0.6);
+  animation: heart-pop 0.45s ease;
+}
+
+@keyframes heart-pop {
+  0%   { transform: scale(0); }
+  60%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}

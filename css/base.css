@@ -1,0 +1,77 @@
+/* base.css — reset, biến màu/chữ, nền, các quầng sáng nền */
+
+:root {
+  /* nền twilight cho bong bóng nổi bật */
+  --bg1: #160f2e;
+  --bg2: #241748;
+  --bg3: #3d2470;
+  /* giấy thư ấm */
+  --paper1: #fffdf8;
+  --paper2: #fff5e6;
+  --ink: #3b332e;
+  --ink-soft: #6f655a;
+  --accent-ink: #b0567f;
+
+  --font-ui: "Quicksand", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-letter: "Lora", Georgia, "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  color: #fff;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 45%, var(--bg3) 100%);
+  background-attachment: fixed;
+}
+
+/* canvas nền vũ trụ (sao / hành tinh / sao băng) */
+#space {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* quầng sáng mờ trôi nhẹ (tinh vân) để nền có chiều sâu */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.32;
+  z-index: 0;
+  pointer-events: none;
+}
+.orb--1 {
+  width: 46vmax; height: 46vmax;
+  left: -12vmax; top: -10vmax;
+  background: #5a3aa0;
+  animation: drift1 24s ease-in-out infinite;
+}
+.orb--2 {
+  width: 40vmax; height: 40vmax;
+  right: -14vmax; bottom: -12vmax;
+  background: #7a3f8a;
+  animation: drift2 30s ease-in-out infinite;
+}
+@keyframes drift1 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(6vmax, 4vmax); }
+}
+@keyframes drift2 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-5vmax, -4vmax); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb { animation: none; }
+}
