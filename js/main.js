@@ -6,6 +6,7 @@ import { createSpace } from './space.js';
 import { createBubbleField } from './bubbles.js';
 import { createLetterView } from './letter.js';
 import { createGrid } from './grid.js';
+import { createLock } from './lock.js';
 import { createConfetti } from './confetti.js';
 import { createUI } from './ui.js';
 
@@ -13,6 +14,24 @@ const space = createSpace(el.space);
 space.start();
 
 const confetti = createConfetti(el.confetti);
+
+// Khóa nội dung: mở đọc thư (bong bóng hoặc lưới) đều phải qua đây.
+const lock = createLock({
+  els: {
+    view: el.lock,
+    card: el.lockCard,
+    boxesWrap: el.codeBoxes,
+    msg: el.lockMsg,
+    cancelBtn: el.lockCancel,
+  },
+  onUnlocked: () => { if (grid.isOpen()) grid.refresh(); },
+});
+const getText = (i) => lock.getText(i);
+// Chạy hàm mở thư nếu đã mở khóa; chưa thì hiện màn nhập mã, đúng mới chạy tiếp.
+const gate = (fn) => {
+  if (lock.isUnlocked()) fn();
+  else lock.prompt().then(fn).catch(() => {});
+};
 
 // Chỉ bật màn kết một lần, khi cô vừa đọc xong lá thư cuối cùng.
 let finaleShown = false;
@@ -24,13 +43,13 @@ function checkFinale() {
   }
 }
 
-// Bong bóng: bấm vào thì mở thư tương ứng.
+// Bong bóng: bấm vào -> qua cổng mã -> mở thư tương ứng.
 const field = createBubbleField({
   container: el.field,
-  onClick: (i) => letter.open(i),
+  onClick: (i) => gate(() => letter.open(i)),
 });
 
-// Thư (popup nở từ bong bóng): đóng xong kiểm tra màn kết.
+// Thư (popup nở từ bong bóng).
 const letter = createLetterView({
   els: {
     overlay: el.overlay,
@@ -46,10 +65,11 @@ const letter = createLetterView({
     nextBtn: el.nextBtn,
   },
   field,
+  getText,
   onClose: checkFinale,
 });
 
-// Lưới xem toàn bộ: chạm thẻ chưa mở để đọc; đóng xong kiểm tra màn kết.
+// Lưới xem toàn bộ.
 const grid = createGrid({
   els: {
     view: el.gridView,
@@ -58,6 +78,8 @@ const grid = createGrid({
     closeBtn: el.gridClose,
   },
   field,
+  getText,
+  requireUnlock: gate,
   onClose: checkFinale,
 });
 
@@ -84,12 +106,15 @@ const ui = createUI({
   onFinaleClose: () => confetti.stop(),
 });
 
-// Đồng bộ số "đã đọc" ở cả thanh trên và tiêu đề lưới.
+// Đồng bộ số "đã đọc".
 state.onChange((count, tot) => {
   ui.updateProgress(count, tot);
   grid.updateCount();
 });
 ui.updateProgress(state.readCount(), state.total());
+
+// Nếu thiết bị này đã nhập mã trước đó -> tự mở khóa (im lặng).
+lock.tryAutoUnlock();
 
 // Nút đặt lại.
 el.resetBtn.addEventListener('click', () => {
@@ -98,6 +123,7 @@ el.resetBtn.addEventListener('click', () => {
   finaleShown = false;
   ui.hideFinale();
   confetti.stop();
+  if (grid.isOpen()) grid.refresh();
 });
 
 // Nút xem toàn bộ (góc + màn kết).

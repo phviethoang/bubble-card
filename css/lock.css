@@ -1,0 +1,111 @@
+/* lock.css — màn nhập mã bí mật để mở đọc thư */
+
+#lock {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 35%, rgba(70, 42, 124, 0.6), rgba(16, 10, 34, 0.95));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+#lock[hidden] { display: none; }
+
+.lock-card {
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(42, 28, 78, 0.9), rgba(28, 18, 54, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 34px 26px 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  animation: screen-rise 0.5s ease both;
+}
+.lock-emblem {
+  font-size: 44px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 6px 16px rgba(255, 210, 140, 0.35));
+  animation: lock-float 3s ease-in-out infinite;
+}
+.lock-title {
+  font-family: var(--font-letter);
+  font-size: clamp(20px, 5vw, 26px);
+  color: #fff;
+  margin: 0 0 10px;
+}
+.lock-desc {
+  color: #dcd2ff;
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+
+.code-boxes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.code-box {
+  width: 44px;
+  height: 54px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "Quicksand", system-ui, monospace;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  outline: none;
+  caret-color: #ffd27a;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+.code-box:focus {
+  border-color: rgba(255, 210, 140, 0.9);
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-2px);
+}
+#lock.is-ok .code-box {
+  border-color: rgba(150, 240, 190, 0.9);
+  background: rgba(120, 230, 170, 0.18);
+}
+
+.lock-msg { min-height: 20px; font-size: 14px; margin: 2px 0 14px; color: #cbb8ff; }
+.lock-msg.is-err { color: #ffb0c0; }
+.lock-msg.is-ok { color: #a6f0c8; }
+
+.lock-cancel {
+  background: none;
+  border: 0;
+  color: #b6a9e0;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 14px;
+  text-decoration: underline;
+}
+.lock-cancel:hover { color: #d6ccff; }
+
+.lock-card.shake { animation: lock-shake 0.4s; }
+
+@keyframes lock-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes lock-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+@media (max-width: 380px) {
+  .code-box { width: 38px; height: 48px; font-size: 20px; }
+  .code-boxes { gap: 7px; }
+}

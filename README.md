@@ -8,22 +8,33 @@ Thiết kế **ưu tiên điện thoại** (để cô quét QR đọc trên máy
 
 ---
 
-## 1. Sửa nội dung (việc duy nhất bạn cần làm)
+## 1. Sửa nội dung + mã hóa (quan trọng)
 
-Mở **`data/letters.js`** — đây là file duy nhất cần chỉnh.
+Nội dung thư được **mã hóa** trước khi đẩy lên, nên phải sửa ở **bản gốc** rồi chạy
+lệnh mã hóa — KHÔNG sửa thẳng `data/letters.js` (đó là bản đã mã hóa, tự sinh).
 
-- **`CONFIG`**: tên cô, câu đề tặng ở màn chào, lời cảm ơn ở màn kết.
-- **`LETTERS`**: danh sách lời nhắn. Mỗi sinh viên một dòng:
+1. Mở **`data/letters.source.js`** (bản rõ, không bị đẩy lên GitHub) và sửa:
+   - **`CONFIG`**: tên cô, câu đề tặng màn chào, lời cảm ơn màn kết.
+   - **`LETTERS`**: mỗi sinh viên một dòng:
+     ```js
+     { name: 'Tên hiển thị', text: `Nội dung tâm thư...` },
+     ```
+   - Ẩn danh: để `name: ''` → bong bóng ghi **"Ẩn danh"**.
+   - Xuống dòng bằng Enter trong dấu backtick `` ` ``; để **một dòng trống** để tách đoạn.
+2. Chạy mã hóa:
+   ```bash
+   node build/encrypt.mjs
+   ```
+   Lệnh này tạo `data/letters.js` (đã mã hóa) và giữ nguyên **mã bí mật** trong
+   `SECRET-CODE.txt`. Muốn đổi mã mới: `node build/encrypt.mjs --new`
+   (hoặc đặt tay: `CODE=ABC234 node build/encrypt.mjs`).
+3. Commit + push (chỉ đẩy bản đã mã hóa; bản rõ và mã đã được `.gitignore`).
 
-```js
-{ name: 'Tên hiển thị', text: `Nội dung tâm thư...` },
-```
+**Khóa xem:** ai vào cũng thấy bong bóng/tên/giao diện, nhưng **mở đọc thư phải nhập
+mã** (in kèm QR / gửi riêng cô). Nhập đúng 1 lần thì thiết bị đó nhớ luôn. Không có mã
+thì kể cả mở source cũng chỉ thấy chuỗi đã mã hóa.
 
-- Ẩn danh: để `name: ''` (hoặc `null`) → bong bóng ghi **"Ẩn danh"**, cuối thư ký **"Một sinh viên của cô"**.
-- Xuống dòng: nhấn Enter trong dấu backtick `` ` ``. Để **một dòng trống** giữa hai đoạn để tách đoạn.
-- Số bong bóng = số phần tử trong `LETTERS`. Thêm/bớt tùy ý (đẹp nhất khoảng 15–25).
-
-> Không cần đụng vào `index.html`, thư mục `css/` hay `js/`.
+> `tên` hiển thị công khai (không mã hóa) để còn vẽ bong bóng; chỉ **nội dung thư** được mã hóa.
 
 ---
 

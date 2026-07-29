@@ -6,7 +6,7 @@ import {
 } from './config.js';
 import { markRead } from './state.js';
 
-export function createLetterView({ els, field, onClose }) {
+export function createLetterView({ els, field, getText, onClose }) {
   const {
     overlay, backdrop, card, closeBtn, scroll,
     fromEl, bodyEl, signEl, countEl, prevBtn, nextBtn,
@@ -20,7 +20,7 @@ export function createLetterView({ els, field, onClose }) {
     fromEl.innerHTML = anon
       ? 'Từ <b>một người giấu tên</b> 🤍'
       : 'Từ <b>' + escapeHtml(letter.name.trim()) + '</b>';
-    bodyEl.innerHTML = toParagraphs(letter.text || '');
+    bodyEl.innerHTML = toParagraphs(getText(i));
     signEl.textContent = anon ? '— Một sinh viên của cô' : '— ' + letter.name.trim();
     countEl.textContent = (i + 1) + ' / ' + LETTERS.length;
     prevBtn.disabled = i === 0;

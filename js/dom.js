@@ -36,6 +36,13 @@ export const el = {
   gridClose: $('gridClose'),
   gridFromFinale: $('gridFromFinale'),
 
+  // màn nhập mã
+  lock: $('lock'),
+  lockCard: $('lockCard'),
+  codeBoxes: $('codeBoxes'),
+  lockMsg: $('lockMsg'),
+  lockCancel: $('lockCancel'),
+
   // lớp phủ thư
   overlay: $('overlay'),
   backdrop: $('backdrop'),

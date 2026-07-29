@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/letter.css" />
   <link rel="stylesheet" href="css/screens.css" />
   <link rel="stylesheet" href="css/panels.css" />
+  <link rel="stylesheet" href="css/lock.css" />
 </head>
 <body>
   <!-- nền vũ trụ: sao, hành tinh, sao băng -->
@@ -96,6 +97,25 @@
     </div>
     <button id="gridClose" aria-label="Đóng">&times;</button>
     <div id="gridBody" class="grid-body"></div>
+  </div>
+
+  <!-- màn nhập mã bí mật -->
+  <div id="lock" hidden>
+    <div class="lock-card" id="lockCard">
+      <div class="lock-emblem">🔒</div>
+      <h2 class="lock-title">Những dòng này đang được giữ kín 🤍</h2>
+      <p class="lock-desc">Đây là những lời nhắn riêng gửi đến cô. Cô nhập mã (in kèm món quà) để mở nhé ạ.</p>
+      <div class="code-boxes" id="codeBoxes">
+        <input class="code-box" maxlength="1" inputmode="text" autocomplete="off" aria-label="Ký tự 1" />
+        <input class="code-box" maxlength="1" inputmode="text" autocomplete="off" aria-label="Ký tự 2" />
+        <input class="code-box" maxlength="1" inputmode="text" autocomplete="off" aria-label="Ký tự 3" />
+        <input class="code-box" maxlength="1" inputmode="text" autocomplete="off" aria-label="Ký tự 4" />
+        <input class="code-box" maxlength="1" inputmode="text" autocomplete="off" aria-label="Ký tự 5" />
+        <input class="code-box" maxlength="1" inputmode="text" autocomplete="off" aria-label="Ký tự 6" />
+      </div>
+      <p class="lock-msg" id="lockMsg"></p>
+      <button class="lock-cancel" id="lockCancel" type="button">Để sau</button>
+    </div>
   </div>
 
   <!-- pháo giấy -->

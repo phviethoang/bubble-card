@@ -1,2 +1,6 @@
 node_modules/
 .DS_Store
+
+# ban ro cua thu + ma bi mat — KHONG day len
+data/letters.source.js
+SECRET-CODE.txt
