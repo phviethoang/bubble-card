@@ -3,5 +3,6 @@ node_modules/
 
 # ban ro cua thu + ma bi mat + file form — KHONG day len
 data/letters.source.js
+data/extra-letters.js
 SECRET-CODE.txt
 *.csv

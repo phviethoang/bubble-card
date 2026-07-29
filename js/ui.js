@@ -1,16 +1,17 @@
 // ui.js — đổ chữ từ CONFIG vào màn chào/màn kết, và điều khiển hiện/ẩn
 // màn chào, thanh tiến trình, gợi ý, màn kết.
 
-import { CONFIG } from './config.js';
+import { CONFIG, LETTERS } from './config.js';
 
 export function createUI({ els, onOpen, onFinaleClose }) {
   // đổ nội dung tĩnh từ CONFIG
   els.eyebrow.textContent = CONFIG.eyebrow;
   els.gtitle.textContent = CONFIG.greetingTitle || ('Gửi cô ' + CONFIG.teacher);
-  els.gsub.textContent = CONFIG.greetingSubtitle;
+  const withCount = (s) => (s || '').split('{count}').join(LETTERS.length);
+  els.gsub.textContent = withCount(CONFIG.greetingSubtitle);
   els.openBtn.textContent = CONFIG.openButton;
   els.ftitle.textContent = CONFIG.finaleTitle;
-  els.fmsg.textContent = CONFIG.finaleMessage;
+  els.fmsg.textContent = withCount(CONFIG.finaleMessage);
   document.title = CONFIG.pageTitle || ('Gửi cô ' + CONFIG.teacher);
 
   els.openBtn.addEventListener('click', () => {

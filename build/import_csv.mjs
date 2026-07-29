@@ -94,24 +94,43 @@ function animalFor(seed) {
 }
 
 const data = rows.slice(1).filter((r) => r.some((c) => c && c.trim()));
+
+// Gộp record từ CSV + file phụ (data/extra-letters.js). Extras nối vào cuối và
+// được giữ lại qua mỗi lần import CSV mới.
+const records = data.map((r) => ({
+  rawName: (r[ci.name] || '').trim(),
+  text: (r[ci.letter] || '').trim(),
+  anonAns: (r[ci.anon] || '').trim(),
+  seed: (ci.id >= 0 && r[ci.id]) ? String(r[ci.id]) : (r[ci.letter] || ''),
+}));
+
+let extras = [];
+try {
+  const ex = await import(pathToFileURL(resolve(root, 'data/extra-letters.js')).href + '?t=' + Date.now());
+  extras = (ex.EXTRAS || []).map((e, i) => ({
+    rawName: (e.name || '').trim(),
+    text: (e.text || '').trim(),
+    anonAns: e.anon === false ? 'Không' : 'Có',
+    seed: 'extra-' + i,
+  }));
+} catch { /* không có file phụ, bỏ qua */ }
+
 const letters = [];
 const report = [];
-for (const r of data) {
-  const rawName = (r[ci.name] || '').trim();
-  const text = (r[ci.letter] || '').trim();
-  const anonAns = (r[ci.anon] || '').trim();
+for (const rec of records.concat(extras)) {
+  const { rawName, text, anonAns, seed } = rec;
   if (!text) continue; // bỏ dòng trống thư
   const forced = FORCE_ANON.some((t) => rawName.toLowerCase().includes(t.toLowerCase()));
   const anon = isAnonAnswer(anonAns) || forced || !rawName;
-  let display;
-  if (anon) {
-    const seed = (ci.id >= 0 && r[ci.id]) ? String(r[ci.id]) : text;
-    display = animalFor(seed) + ' ẩn danh';
-  } else {
-    display = lastTwoWords(rawName) || (animalFor(text) + ' ẩn danh');
-  }
+  const display = anon
+    ? animalFor(seed) + ' ẩn danh'
+    : (lastTwoWords(rawName) || animalFor(seed) + ' ẩn danh');
   letters.push({ name: display, text });
-  report.push({ goc: rawName || '(trống)', tra_loi: anonAns, hien: display, anon: anon ? (forced && !isAnonAnswer(anonAns) ? 'ẩn danh (ép/troll)' : 'ẩn danh') : 'giữ tên' });
+  report.push({
+    goc: rawName || '(trống)',
+    hien: display,
+    anon: anon ? (forced && !isAnonAnswer(anonAns) ? 'ẩn danh (ép/troll)' : 'ẩn danh') : 'giữ tên',
+  });
 }
 
 // ---- Giữ nguyên CONFIG hiện có, chỉ thay LETTERS ----
